@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-
 @RestController
 @RequestMapping("/pessoas")
 public class PessoaController {
@@ -36,7 +35,7 @@ public class PessoaController {
         return ResponseEntity.ok().body(pessoaResponseDTO);
     }
 
-    @PostMapping("/salvar")
+    @PostMapping
     public ResponseEntity<PessoaResponseDTO> salvar(@RequestBody @Valid PessoaRequestDTO pessoaRequestDTO) {
         PessoaResponseDTO pessoaResponseDTO = pessoaService.salvar(pessoaRequestDTO);
         return ResponseEntity.ok().body(pessoaResponseDTO);
