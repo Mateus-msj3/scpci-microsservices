@@ -1,5 +1,6 @@
 package io.github.msj.mspessoa.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.github.msj.mspessoa.model.Endereco;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class PessoaResponseDTO {
 
     private String sobrenome;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dataNascimento;
 
     private String cpf;
