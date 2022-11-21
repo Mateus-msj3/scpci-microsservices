@@ -20,8 +20,8 @@ public class CursoController {
     @Autowired
     private CursoService cursoService;
 
-        @GetMapping
-        public ResponseEntity<List<CursoResponseDTO>> listarTodos() {
+    @GetMapping
+    public ResponseEntity<List<CursoResponseDTO>> listarTodos() {
         List<CursoResponseDTO> list = cursoService.listarTodos();
         return ResponseEntity.ok().body(list);
     }
@@ -32,13 +32,13 @@ public class CursoController {
         return ResponseEntity.ok().body(cursoResponseDTO);
     }
 
-    @PostMapping("/salvar")
+    @PostMapping
     public ResponseEntity<CursoSalvoResponseDTO> salvar(@RequestBody @Valid CursoRequestDTO cursoRequestDTO) {
         CursoSalvoResponseDTO cursoSalvoResponseDTO = cursoService.salvar(cursoRequestDTO);
         return ResponseEntity.ok().body(cursoSalvoResponseDTO);
     }
 
-    @PutMapping("/editar/{idCurso}")
+    @PutMapping("{idCurso}")
     public ResponseEntity<CursoSituacaoInscricaoResponseDTO> atualizarSituacaoInscricao(@PathVariable Long idCurso, @RequestBody CursoSituacaoInscricaoRequestDTO cursoSituacaoInscricaoRequestDTO) {
         CursoSituacaoInscricaoResponseDTO cursoSituacaoInscricaoResponseDTO = cursoService.editarSituacaoInscricao(idCurso, cursoSituacaoInscricaoRequestDTO);
         return ResponseEntity.ok().body(cursoSituacaoInscricaoResponseDTO);
