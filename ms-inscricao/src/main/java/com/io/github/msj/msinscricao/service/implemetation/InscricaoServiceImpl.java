@@ -43,8 +43,11 @@ public class InscricaoServiceImpl implements InscricaoService {
     @Override
     @Transactional
     public InscricaoMensagemResponseDTO salvar(InscricaoRequestDTO inscricaoRequestDTO) {
-        if (inscricaoRepository.existsByCpf(inscricaoRequestDTO.getCpf())) {
-            throw new NegocioException("O candidato com cpf: " + inscricaoRequestDTO.getCpf() + " já está inscrito no curso.");
+        List<Inscricao> inscricoesEncontradas = inscricaoRepository.findByIdCurso(inscricaoRequestDTO.getIdCurso());
+        for (Inscricao inscricao : inscricoesEncontradas) {
+            if (inscricao.getCpf().equals(inscricaoRequestDTO.getCpf())) {
+                throw new NegocioException("O candidato com cpf: " + inscricaoRequestDTO.getCpf() + " já está inscrito no curso.");
+            }
         }
         Inscricao inscricaoRequest = modelMapper.map(inscricaoRequestDTO, Inscricao.class);
         inscricaoRepository.save(inscricaoRequest);
@@ -66,10 +69,10 @@ public class InscricaoServiceImpl implements InscricaoService {
     public List<InscricaoResponseDTO> listarInscricaoPorCurso(Integer idCurso) {
         List<Inscricao> inscricoesEncontradas = inscricaoRepository.findByIdCurso(idCurso);
         List<InscricaoResponseDTO> inscricaoResponseDTOS = new ArrayList<>();
-        InscricaoResponseDTO inscricaoResponseDTO = new InscricaoResponseDTO();
         for (Inscricao inscricao : inscricoesEncontradas) {
             PessoaResponseDTO pessoa = pessoaClientService.buscarPessoaPorCpf(inscricao.getCpf());
             if (pessoa != null) {
+                InscricaoResponseDTO inscricaoResponseDTO = new InscricaoResponseDTO();
                 inscricaoResponseDTO.setNomeInscrito(pessoa.getNome());
                 inscricaoResponseDTO.setSobrenome(pessoa.getSobrenome());
                 inscricaoResponseDTO.setCpf(pessoa.getCpf());
@@ -81,16 +84,23 @@ public class InscricaoServiceImpl implements InscricaoService {
     }
 
     @Override
-    public List<InscricaoFinalizadaResponseDTO> inscritosFinalizados(Integer idCurso) {
+    public List<InscricaoResponseDTO> inscritosFinalizados(Integer idCurso) {
         List<Inscricao> inscricoesEncontradas = inscricaoRepository.findByIdCurso(idCurso);
-        List<InscricaoFinalizadaResponseDTO> retorno = new ArrayList<>();
+        List<InscricaoResponseDTO> inscricaoResponseDTOS = new ArrayList<>();
         for (Inscricao inscricao : inscricoesEncontradas){
             if (inscricao.getSituacao().equals(Situacao.SELECIONADO)) {
-                InscricaoFinalizadaResponseDTO inscricaoFinalizadaResponseDTO = modelMapper.map(inscricao, InscricaoFinalizadaResponseDTO.class);
-                retorno.add(inscricaoFinalizadaResponseDTO);
+                PessoaResponseDTO pessoa = pessoaClientService.buscarPessoaPorCpf(inscricao.getCpf());
+                if (pessoa != null) {
+                    InscricaoResponseDTO inscricaoResponseDTO = new InscricaoResponseDTO();
+                    inscricaoResponseDTO.setNomeInscrito(pessoa.getNome());
+                    inscricaoResponseDTO.setSobrenome(pessoa.getSobrenome());
+                    inscricaoResponseDTO.setCpf(pessoa.getCpf());
+                    inscricaoResponseDTO.setNota(inscricao.getNota());
+                    inscricaoResponseDTOS.add(inscricaoResponseDTO);
+                }
             }
         }
-        return retorno;
+        return inscricaoResponseDTOS;
     }
 
 }

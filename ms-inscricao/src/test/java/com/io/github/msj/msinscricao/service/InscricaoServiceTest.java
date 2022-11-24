@@ -122,9 +122,11 @@ public class InscricaoServiceTest {
         List<InscricaoFinalizadaResponseDTO> responseDTOS =Arrays.asList(retorno1, retorno3);
 
         when(inscricaoRepository.findByIdCurso(ID)).thenReturn(inscricoes);
-        when(modelMapper.map(any(), any())).thenReturn(retorno1, retorno3);
+        //when(modelMapper.map(any(), any())).thenReturn(retorno1, retorno3);
+        when(pessoaClientService.buscarPessoaPorCpf(inscricao.getCpf())).thenReturn(PessoaResponseDTO.builder().nome("Teste").sobrenome("Teste2").cpf("11122233344").build());
 
-        List<InscricaoFinalizadaResponseDTO> retorno = inscricaoService.inscritosFinalizados(ID);
+
+        List<InscricaoResponseDTO> retorno = inscricaoService.inscritosFinalizados(ID);
 
         verify(inscricaoRepository, times(1)).findByIdCurso(eq(ID));
 

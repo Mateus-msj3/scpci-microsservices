@@ -33,8 +33,8 @@ public class InscricaoController {
     }
 
     @GetMapping("/inscritos-finalizados/{idCurso}")
-    public ResponseEntity<List<InscricaoFinalizadaResponseDTO>> listarInscritosFinalizados(@PathVariable Integer idCurso) {
-        List<InscricaoFinalizadaResponseDTO> responseDTOS = inscricaoService.inscritosFinalizados(idCurso);
+    public ResponseEntity<List<InscricaoResponseDTO>> listarInscritosFinalizados(@PathVariable Integer idCurso) {
+        List<InscricaoResponseDTO> responseDTOS = inscricaoService.inscritosFinalizados(idCurso);
         return ResponseEntity.ok().body(responseDTOS);
     }
 

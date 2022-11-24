@@ -16,6 +16,6 @@ public interface InscricaoService {
 
     List<InscricaoResponseDTO> listarInscricaoPorCurso(Integer idCurso);
 
-    List<InscricaoFinalizadaResponseDTO> inscritosFinalizados(Integer idCurso);
+    List<InscricaoResponseDTO> inscritosFinalizados(Integer idCurso);
 
 }

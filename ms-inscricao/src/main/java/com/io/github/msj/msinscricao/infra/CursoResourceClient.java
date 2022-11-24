@@ -21,7 +21,7 @@ public interface CursoResourceClient {
     @GetMapping
     ResponseEntity<List<CursoResponseDTO>> listarTodos();
 
-    @PutMapping("/editar/{idCurso}")
+    @PutMapping("/{idCurso}")
     ResponseEntity<CursoSituacaoInscricaoResponseDTO> atualizarSituacaoInscricao(@PathVariable Long idCurso, @RequestBody CursoSituacaoInscricaoRequestDTO cursoSituacaoInscricaoRequestDTO);
 
 }
