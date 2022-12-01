@@ -48,4 +48,9 @@ public class InscricaoController {
         }
     }
 
+    @GetMapping("/quantidades-pessoas-inscritas")
+    public ResponseEntity<Long> buscarQuantidadePessoasInscritasCurso() {
+        return ResponseEntity.ok().body(inscricaoService.quantidadePessoasInscritasNumCurso());
+    }
+
 }

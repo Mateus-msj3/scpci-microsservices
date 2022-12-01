@@ -18,4 +18,6 @@ public interface InscricaoService {
 
     List<InscricaoResponseDTO> inscritosFinalizados(Integer idCurso);
 
+    Long quantidadePessoasInscritasNumCurso();
+
 }

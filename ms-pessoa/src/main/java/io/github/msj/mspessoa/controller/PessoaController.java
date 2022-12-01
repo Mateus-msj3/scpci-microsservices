@@ -53,4 +53,9 @@ public class PessoaController {
         pessoaService.deletar(idPessoa);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/quantidade_pessoas_cadastradas")
+    public ResponseEntity<Long> buscarQuantidadePessoas() {
+        return ResponseEntity.ok().body(pessoaService.quantidadePessoasCadastradas());
+    }
 }

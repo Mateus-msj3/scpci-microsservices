@@ -76,6 +76,11 @@ public class PessoaServiceImpl implements PessoaService {
         pessoaRepository.delete(pessoa.get());
     }
 
+    @Override
+    public Long quantidadePessoasCadastradas() {
+        return pessoaRepository.count();
+    }
+
     public void validarNome(PessoaRequestDTO pessoaRequestDTO) {
         if (!Character.isUpperCase(pessoaRequestDTO.getNome().codePointAt(0))) {
             var nome = pessoaRequestDTO.getNome().toLowerCase();

@@ -2,6 +2,7 @@ package com.io.github.msj.mscurso.service;
 
 import com.io.github.msj.mscurso.dto.request.CursoRequestDTO;
 import com.io.github.msj.mscurso.dto.request.CursoSituacaoInscricaoRequestDTO;
+import com.io.github.msj.mscurso.dto.response.CursoDashboardDTO;
 import com.io.github.msj.mscurso.dto.response.CursoResponseDTO;
 import com.io.github.msj.mscurso.dto.response.CursoSalvoResponseDTO;
 import com.io.github.msj.mscurso.dto.response.CursoSituacaoInscricaoResponseDTO;
@@ -17,5 +18,7 @@ public interface CursoService {
     CursoSalvoResponseDTO salvar(CursoRequestDTO cursoRequestDTO);
 
     CursoSituacaoInscricaoResponseDTO editarSituacaoInscricao(Long idCurso, CursoSituacaoInscricaoRequestDTO cursoSituacaoInscricaoRequestDTO);
+
+    CursoDashboardDTO dadosDashboard();
 
 }

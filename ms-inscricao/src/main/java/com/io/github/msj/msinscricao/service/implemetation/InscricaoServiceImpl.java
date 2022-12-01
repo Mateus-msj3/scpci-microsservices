@@ -103,4 +103,9 @@ public class InscricaoServiceImpl implements InscricaoService {
         return inscricaoResponseDTOS;
     }
 
+    @Override
+    public Long quantidadePessoasInscritasNumCurso() {
+        return inscricaoRepository.countByCpf();
+    }
+
 }

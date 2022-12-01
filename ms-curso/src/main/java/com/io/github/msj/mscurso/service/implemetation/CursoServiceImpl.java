@@ -2,6 +2,7 @@ package com.io.github.msj.mscurso.service.implemetation;
 
 import com.io.github.msj.mscurso.dto.request.CursoRequestDTO;
 import com.io.github.msj.mscurso.dto.request.CursoSituacaoInscricaoRequestDTO;
+import com.io.github.msj.mscurso.dto.response.CursoDashboardDTO;
 import com.io.github.msj.mscurso.dto.response.CursoResponseDTO;
 import com.io.github.msj.mscurso.dto.response.CursoSalvoResponseDTO;
 import com.io.github.msj.mscurso.dto.response.CursoSituacaoInscricaoResponseDTO;
@@ -60,6 +61,25 @@ public class CursoServiceImpl implements CursoService {
         curso.get().setSituacaoInscricao(cursoSituacaoInscricaoRequestDTO.getSituacaoInscricao());
         cursoRepository.saveAndFlush(curso.get());
         return new CursoSituacaoInscricaoResponseDTO("Sucesso ao atualizar a situção de inscrição no curso");
+    }
+
+
+    @Override
+    public CursoDashboardDTO dadosDashboard() {
+         Long quantidadeCursosCadastrados = cursoRepository.count() >= 0 ? cursoRepository.count() : 0;
+
+         Long quantidadeCursosEmAndamento = cursoRepository.countBySituacaoInscricao(SituacaoInscricao.EM_ANDAMENTO)
+                 >= 0 ? cursoRepository.countBySituacaoInscricao(SituacaoInscricao.EM_ANDAMENTO) : 0;
+
+         Long quantidadeCursosFinalizados =  cursoRepository.countBySituacaoInscricao(SituacaoInscricao.FINALIZADO)
+                 >= 0 ? cursoRepository.countBySituacaoInscricao(SituacaoInscricao.FINALIZADO) : 0;
+
+        return CursoDashboardDTO
+                .builder()
+                .quantidadeCursosCadastrados(quantidadeCursosCadastrados)
+                .quantidadeCursosEmAndamento(quantidadeCursosEmAndamento)
+                .quantidadeCursosFinalizados(quantidadeCursosFinalizados)
+                .build();
     }
 
     private void antesDeSalvarDefineSituacaoInscricao(Curso curso) {

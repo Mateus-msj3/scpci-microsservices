@@ -19,4 +19,6 @@ public interface PessoaService {
 
     void deletar(Long idPessoa);
 
+    Long quantidadePessoasCadastradas();
+
 }

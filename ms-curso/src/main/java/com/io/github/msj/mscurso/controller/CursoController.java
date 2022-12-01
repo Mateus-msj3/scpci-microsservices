@@ -2,6 +2,7 @@ package com.io.github.msj.mscurso.controller;
 
 import com.io.github.msj.mscurso.dto.request.CursoRequestDTO;
 import com.io.github.msj.mscurso.dto.request.CursoSituacaoInscricaoRequestDTO;
+import com.io.github.msj.mscurso.dto.response.CursoDashboardDTO;
 import com.io.github.msj.mscurso.dto.response.CursoResponseDTO;
 import com.io.github.msj.mscurso.dto.response.CursoSalvoResponseDTO;
 import com.io.github.msj.mscurso.dto.response.CursoSituacaoInscricaoResponseDTO;
@@ -42,6 +43,12 @@ public class CursoController {
     public ResponseEntity<CursoSituacaoInscricaoResponseDTO> atualizarSituacaoInscricao(@PathVariable Long idCurso, @RequestBody CursoSituacaoInscricaoRequestDTO cursoSituacaoInscricaoRequestDTO) {
         CursoSituacaoInscricaoResponseDTO cursoSituacaoInscricaoResponseDTO = cursoService.editarSituacaoInscricao(idCurso, cursoSituacaoInscricaoRequestDTO);
         return ResponseEntity.ok().body(cursoSituacaoInscricaoResponseDTO);
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<CursoDashboardDTO> buscarDadosDashboard() {
+        CursoDashboardDTO cursoDashboardDTO = cursoService.dadosDashboard();
+        return ResponseEntity.ok().body(cursoDashboardDTO);
     }
 
 }
