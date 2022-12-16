@@ -2,6 +2,7 @@ package com.io.github.msj.msinscricao.controller;
 
 import com.io.github.msj.msinscricao.dto.request.InscricaoFinalizacaoRequestDTO;
 import com.io.github.msj.msinscricao.dto.request.InscricaoRequestDTO;
+import com.io.github.msj.msinscricao.dto.response.InscricaoDashboardDTO;
 import com.io.github.msj.msinscricao.dto.response.InscricaoFinalizadaResponseDTO;
 import com.io.github.msj.msinscricao.dto.response.InscricaoMensagemResponseDTO;
 import com.io.github.msj.msinscricao.dto.response.InscricaoResponseDTO;
@@ -51,6 +52,11 @@ public class InscricaoController {
     @GetMapping("/quantidades-pessoas-inscritas")
     public ResponseEntity<Long> buscarQuantidadePessoasInscritasCurso() {
         return ResponseEntity.ok().body(inscricaoService.quantidadePessoasInscritasNumCurso());
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<InscricaoDashboardDTO> dashboard() {
+        return ResponseEntity.ok().body(inscricaoService.dadosDashboard());
     }
 
 }

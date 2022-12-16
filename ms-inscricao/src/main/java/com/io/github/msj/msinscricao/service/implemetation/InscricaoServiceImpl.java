@@ -2,10 +2,7 @@ package com.io.github.msj.msinscricao.service.implemetation;
 
 import com.io.github.msj.msinscricao.dto.request.InscricaoFinalizacaoRequestDTO;
 import com.io.github.msj.msinscricao.dto.request.InscricaoRequestDTO;
-import com.io.github.msj.msinscricao.dto.response.InscricaoFinalizadaResponseDTO;
-import com.io.github.msj.msinscricao.dto.response.InscricaoMensagemResponseDTO;
-import com.io.github.msj.msinscricao.dto.response.InscricaoResponseDTO;
-import com.io.github.msj.msinscricao.dto.response.PessoaResponseDTO;
+import com.io.github.msj.msinscricao.dto.response.*;
 import com.io.github.msj.msinscricao.enums.Situacao;
 import com.io.github.msj.msinscricao.exception.NegocioException;
 import com.io.github.msj.msinscricao.infra.mqueue.FinalizarInscricaoPublisher;
@@ -39,11 +36,14 @@ public class InscricaoServiceImpl implements InscricaoService {
     @Autowired
     private FinalizarInscricaoPublisher finalizarInscricaoPublisher;
 
+    private List<Inscricao> buscarInscricaoPorIdCurso(Integer idCurso) {
+        return this.inscricaoRepository.findByIdCurso(idCurso);
+    }
 
     @Override
     @Transactional
     public InscricaoMensagemResponseDTO salvar(InscricaoRequestDTO inscricaoRequestDTO) {
-        List<Inscricao> inscricoesEncontradas = inscricaoRepository.findByIdCurso(inscricaoRequestDTO.getIdCurso());
+        List<Inscricao> inscricoesEncontradas = this.buscarInscricaoPorIdCurso(inscricaoRequestDTO.getIdCurso());
         for (Inscricao inscricao : inscricoesEncontradas) {
             if (inscricao.getCpf().equals(inscricaoRequestDTO.getCpf())) {
                 throw new NegocioException("O candidato com cpf: " + inscricaoRequestDTO.getCpf() + " já está inscrito no curso.");
@@ -60,14 +60,14 @@ public class InscricaoServiceImpl implements InscricaoService {
             finalizarInscricaoPublisher.finalizarInscricao(inscricaoFinalizacaoRequestDTO);
             return new InscricaoMensagemResponseDTO("Inscrição finalizada com sucesso.");
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new NegocioException(e.getMessage());
         }
     }
 
     @Override
     public List<InscricaoResponseDTO> listarInscricaoPorCurso(Integer idCurso) {
-        List<Inscricao> inscricoesEncontradas = inscricaoRepository.findByIdCurso(idCurso);
+        List<Inscricao> inscricoesEncontradas = this.buscarInscricaoPorIdCurso(idCurso);
         List<InscricaoResponseDTO> inscricaoResponseDTOS = new ArrayList<>();
         for (Inscricao inscricao : inscricoesEncontradas) {
             PessoaResponseDTO pessoa = pessoaClientService.buscarPessoaPorCpf(inscricao.getCpf());
@@ -85,9 +85,9 @@ public class InscricaoServiceImpl implements InscricaoService {
 
     @Override
     public List<InscricaoResponseDTO> inscritosFinalizados(Integer idCurso) {
-        List<Inscricao> inscricoesEncontradas = inscricaoRepository.findByIdCurso(idCurso);
+        List<Inscricao> inscricoesEncontradas = this.buscarInscricaoPorIdCurso(idCurso);
         List<InscricaoResponseDTO> inscricaoResponseDTOS = new ArrayList<>();
-        for (Inscricao inscricao : inscricoesEncontradas){
+        for (Inscricao inscricao : inscricoesEncontradas) {
             if (inscricao.getSituacao().equals(Situacao.SELECIONADO)) {
                 PessoaResponseDTO pessoa = pessoaClientService.buscarPessoaPorCpf(inscricao.getCpf());
                 if (pessoa != null) {
@@ -106,6 +106,25 @@ public class InscricaoServiceImpl implements InscricaoService {
     @Override
     public Long quantidadePessoasInscritasNumCurso() {
         return inscricaoRepository.countByCpf();
+    }
+
+    @Override
+    public InscricaoDashboardDTO dadosDashboard() {
+        List<Inscricao> inscricoesEncontradas = inscricaoRepository.findAll();
+        Long menorInscricao = 0L;
+        Long maiorInscricao = 0L;
+        Long quantidadeInscritosPorCurso = 0L;
+        for (Inscricao inscricao : inscricoesEncontradas) {
+            quantidadeInscritosPorCurso = this.inscricaoRepository.countByInscricaoCurso(inscricao.getIdCurso());
+
+            if (quantidadeInscritosPorCurso > maiorInscricao) {
+                maiorInscricao = quantidadeInscritosPorCurso;
+            }
+            if ((menorInscricao == 0) || menorInscricao > quantidadeInscritosPorCurso) {
+                menorInscricao = quantidadeInscritosPorCurso;
+            }
+        }
+        return InscricaoDashboardDTO.builder().maiorInscricao(maiorInscricao).menorInscricao(menorInscricao).build();
     }
 
 }

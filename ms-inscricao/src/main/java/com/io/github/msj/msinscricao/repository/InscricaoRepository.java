@@ -17,4 +17,7 @@ public interface InscricaoRepository extends JpaRepository<Inscricao, Long> {
     @Query("select count(distinct cpf) from Inscricao")
     long countByCpf();
 
+    @Query("select count(i.cpf) from Inscricao i where i.idCurso = ?1")
+    long countByInscricaoCurso(Integer idCurso);
+
 }
