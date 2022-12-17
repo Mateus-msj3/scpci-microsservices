@@ -23,4 +23,6 @@ public interface InscricaoService {
 
     InscricaoDashboardDTO dadosDashboard();
 
+    List<InscricaoResponseDTO> pessoasInscritas(Integer idCurso);
+
 }

@@ -1,4 +1,4 @@
-package com.io.github.msj.msinscricao.dto.response;
+package io.github.msj.mspessoa.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

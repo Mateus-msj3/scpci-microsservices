@@ -1,13 +1,17 @@
 package io.github.msj.mspessoa.controller;
 
 import io.github.msj.mspessoa.dto.request.PessoaRequestDTO;
+import io.github.msj.mspessoa.dto.response.PessoaInscritaReportResponseDTO;
 import io.github.msj.mspessoa.dto.response.PessoaResponseDTO;
+import io.github.msj.mspessoa.service.PessoaReportService;
 import io.github.msj.mspessoa.service.PessoaService;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Optional;
 @RestController
@@ -16,6 +20,9 @@ public class PessoaController {
 
     @Autowired
     private PessoaService pessoaService;
+
+    @Autowired
+    private PessoaReportService pessoaReportService;
 
     @GetMapping
     public ResponseEntity<List<PessoaResponseDTO>> listarTodos() {
@@ -57,5 +64,10 @@ public class PessoaController {
     @GetMapping("/quantidade_pessoas_cadastradas")
     public ResponseEntity<Long> buscarQuantidadePessoas() {
         return ResponseEntity.ok().body(pessoaService.quantidadePessoasCadastradas());
+    }
+
+    @GetMapping("/relatorio-pessoas-inscritas/{idCurso}")
+    public String gerarRelatorioPessoasInscritas(@PathVariable Integer idCurso) throws JRException, FileNotFoundException {
+        return pessoaReportService.gerarRelatorioPessoasInscritas(idCurso);
     }
 }

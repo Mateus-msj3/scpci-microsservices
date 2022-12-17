@@ -59,4 +59,9 @@ public class InscricaoController {
         return ResponseEntity.ok().body(inscricaoService.dadosDashboard());
     }
 
+    @GetMapping("/pessoasInscritas/{idCurso}")
+    public ResponseEntity<List<InscricaoResponseDTO>> buscarPessoasInscritas(@PathVariable Integer idCurso) {
+        return ResponseEntity.ok().body(inscricaoService.pessoasInscritas(idCurso));
+    }
+
 }

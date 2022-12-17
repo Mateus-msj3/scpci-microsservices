@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class InscricaoServiceImpl implements InscricaoService {
@@ -35,10 +36,6 @@ public class InscricaoServiceImpl implements InscricaoService {
 
     @Autowired
     private FinalizarInscricaoPublisher finalizarInscricaoPublisher;
-
-    private List<Inscricao> buscarInscricaoPorIdCurso(Integer idCurso) {
-        return this.inscricaoRepository.findByIdCurso(idCurso);
-    }
 
     @Override
     @Transactional
@@ -108,6 +105,10 @@ public class InscricaoServiceImpl implements InscricaoService {
         return inscricaoRepository.countByCpf();
     }
 
+    private List<Inscricao> buscarInscricaoPorIdCurso(Integer idCurso) {
+        return this.inscricaoRepository.findByIdCurso(idCurso);
+    }
+
     @Override
     public InscricaoDashboardDTO dadosDashboard() {
         List<Inscricao> inscricoesEncontradas = inscricaoRepository.findAll();
@@ -125,6 +126,14 @@ public class InscricaoServiceImpl implements InscricaoService {
             }
         }
         return InscricaoDashboardDTO.builder().maiorInscricao(maiorInscricao).menorInscricao(menorInscricao).build();
+    }
+
+    @Override
+    public List<InscricaoResponseDTO> pessoasInscritas(Integer idCurso) {
+        List<Inscricao> inscricoes = this.buscarInscricaoPorIdCurso(idCurso);
+        return inscricoes.stream()
+                .map(inscricao -> modelMapper.map(inscricao, InscricaoResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
 }
