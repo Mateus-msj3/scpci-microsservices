@@ -136,4 +136,14 @@ public class InscricaoServiceImpl implements InscricaoService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Long quantidadeInscritosSelecionados(Integer idCurso) {
+        return inscricaoRepository.countByIdCursoAndSituacao(idCurso, Situacao.SELECIONADO);
+    }
+
+    @Override
+    public Long quantidadeInscritosNaoSelecionados(Integer idCurso) {
+        return inscricaoRepository.countByIdCursoAndSituacao(idCurso, Situacao.NAO_SELECIONADO);
+    }
+
 }

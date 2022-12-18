@@ -25,4 +25,8 @@ public interface InscricaoService {
 
     List<InscricaoResponseDTO> pessoasInscritas(Integer idCurso);
 
+    Long quantidadeInscritosSelecionados(Integer idCurso);
+
+    Long quantidadeInscritosNaoSelecionados(Integer idCurso);
+
 }

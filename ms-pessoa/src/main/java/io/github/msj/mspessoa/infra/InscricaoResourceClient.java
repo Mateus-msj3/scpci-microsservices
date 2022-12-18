@@ -13,4 +13,10 @@ public interface InscricaoResourceClient {
 
     @GetMapping("/pessoasInscritas/{idCurso}")
     ResponseEntity<List<InscricaoResponseDTO>> buscarPessoasInscritas(@PathVariable Integer idCurso);
+
+    @GetMapping("/quantidade-inscritos-selecionados/{idCurso}")
+    ResponseEntity<Long> buscarQuantidadeInscritosSelecionados(@PathVariable Integer idCurso);
+
+    @GetMapping("/quantidade-inscritos-nao-selecionados/{idCurso}")
+    ResponseEntity<Long> buscarQuantidadeInscritosNaoSelecionados(@PathVariable Integer idCurso);
 }

@@ -23,4 +23,22 @@ public class InscricaoClientService {
         }
         return null;
     }
+
+    Long quantidadeDeSelecionados(Integer idCurso) {
+        ResponseEntity<Long> response = inscricaoResourceClient.buscarQuantidadeInscritosSelecionados(idCurso);
+        Long quantidade = response.getBody();
+        if (quantidade != null) {
+            return quantidade;
+        }
+        return 0L;
+    }
+
+    Long quantidadeDeNaoSelecionados(Integer idCurso) {
+        ResponseEntity<Long> response = inscricaoResourceClient.buscarQuantidadeInscritosNaoSelecionados(idCurso);
+        Long quantidade = response.getBody();
+        if (quantidade != null) {
+            return quantidade;
+        }
+        return 0L;
+    }
 }

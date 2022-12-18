@@ -64,4 +64,14 @@ public class InscricaoController {
         return ResponseEntity.ok().body(inscricaoService.pessoasInscritas(idCurso));
     }
 
+    @GetMapping("/quantidade-inscritos-selecionados/{idCurso}")
+    public ResponseEntity<Long> buscarQuantidadeInscritosSelecionados(@PathVariable Integer idCurso) {
+        return ResponseEntity.ok().body(inscricaoService.quantidadeInscritosSelecionados(idCurso));
+    }
+
+    @GetMapping("/quantidade-inscritos-nao-selecionados/{idCurso}")
+    public ResponseEntity<Long> buscarQuantidadeInscritosNaoSelecionados(@PathVariable Integer idCurso) {
+        return ResponseEntity.ok().body(inscricaoService.quantidadeInscritosNaoSelecionados(idCurso));
+    }
+
 }

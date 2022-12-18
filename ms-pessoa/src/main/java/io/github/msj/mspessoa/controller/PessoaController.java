@@ -1,5 +1,6 @@
 package io.github.msj.mspessoa.controller;
 
+import io.github.msj.mspessoa.dto.request.PessoaReportRequestDTO;
 import io.github.msj.mspessoa.dto.request.PessoaRequestDTO;
 import io.github.msj.mspessoa.dto.response.PessoaInscritaReportResponseDTO;
 import io.github.msj.mspessoa.dto.response.PessoaResponseDTO;
@@ -66,8 +67,8 @@ public class PessoaController {
         return ResponseEntity.ok().body(pessoaService.quantidadePessoasCadastradas());
     }
 
-    @GetMapping("/relatorio-pessoas-inscritas/{idCurso}")
-    public String gerarRelatorioPessoasInscritas(@PathVariable Integer idCurso) throws JRException, FileNotFoundException {
-        return pessoaReportService.gerarRelatorioPessoasInscritas(idCurso);
+    @PostMapping("/relatorio-pessoas-inscritas")
+    public String gerarRelatorioPessoasInscritas(@RequestBody PessoaReportRequestDTO pessoaReportRequestDTO) throws JRException, FileNotFoundException {
+        return pessoaReportService.relatorioPessoasInscritas(pessoaReportRequestDTO);
     }
 }

@@ -1,10 +1,12 @@
 package io.github.msj.mspessoa.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -17,6 +19,7 @@ public class PessoaInscritaReportResponseDTO {
 
     private String sobrenome;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dataNascimento;
 
     private String cpf;
@@ -27,12 +30,8 @@ public class PessoaInscritaReportResponseDTO {
 
     private String estado;
 
+    private BigDecimal nota;
+
     private String situacaoInscricao;
-
-    private String curso;
-
-    private String situacaoCurso;
-
-    private Integer numeroVagasCurso;
 
 }
