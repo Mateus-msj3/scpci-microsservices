@@ -2,19 +2,19 @@ package io.github.msj.mspessoa.controller;
 
 import io.github.msj.mspessoa.dto.request.PessoaReportRequestDTO;
 import io.github.msj.mspessoa.dto.request.PessoaRequestDTO;
-import io.github.msj.mspessoa.dto.response.PessoaInscritaReportResponseDTO;
 import io.github.msj.mspessoa.dto.response.PessoaResponseDTO;
 import io.github.msj.mspessoa.service.PessoaReportService;
 import io.github.msj.mspessoa.service.PessoaService;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Optional;
 @RestController
 @RequestMapping("/pessoas")
 public class PessoaController {
@@ -68,7 +68,14 @@ public class PessoaController {
     }
 
     @PostMapping("/relatorio-pessoas-inscritas")
-    public String gerarRelatorioPessoasInscritas(@RequestBody PessoaReportRequestDTO pessoaReportRequestDTO) throws JRException, FileNotFoundException {
-        return pessoaReportService.relatorioPessoasInscritas(pessoaReportRequestDTO);
+    public ResponseEntity<byte[]> gerarRelatorioPessoasInscritas(@RequestBody PessoaReportRequestDTO pessoaReportRequestDTO) throws JRException, FileNotFoundException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=pessoas-inscritas.pdf");
+        byte [] report = pessoaReportService.relatorioPessoasInscritas(pessoaReportRequestDTO);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(report);
     }
+
 }

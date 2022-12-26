@@ -8,6 +8,7 @@ import io.github.msj.mspessoa.dto.response.PessoaResponseDTO;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
@@ -35,7 +36,7 @@ public class PessoaReportService {
     @Autowired
     CursoClientService cursoClientService;
 
-    public String relatorioPessoasInscritas(PessoaReportRequestDTO pessoaReportRequestDTO) throws JRException, FileNotFoundException {
+    public byte[] relatorioPessoasInscritas(PessoaReportRequestDTO pessoaReportRequestDTO) throws JRException, FileNotFoundException {
         List<PessoaInscritaReportResponseDTO> pessoasInscritas = new ArrayList<>();
 
         List<InscricaoResponseDTO> inscricoes = inscricaoClientService.pessoasInscritas(pessoaReportRequestDTO.getIdCurso().intValue());
@@ -77,7 +78,7 @@ public class PessoaReportService {
         return null;
     }
 
-    public String gerarRelatorio(List<PessoaInscritaReportResponseDTO> pessoas, Map<String, Object> parametros) throws FileNotFoundException, JRException {
+    public byte[] gerarRelatorio(List<PessoaInscritaReportResponseDTO> pessoas, Map<String, Object> parametros) throws FileNotFoundException, JRException {
         File file = ResourceUtils.getFile(LOCAL_ARMAZENAMENTO_RELATORIO_JASPER);
 
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
@@ -86,8 +87,9 @@ public class PessoaReportService {
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, dataSource);
 
-        JasperExportManager.exportReportToPdfFile(jasperPrint, LOCAL_ARMAZENAMENTO_RELATORIO_PDF);
+        byte[] relatorio = JasperExportManager.exportReportToPdf(jasperPrint);
 
-        return "Relatório gerado com sucesso: " + LOCAL_ARMAZENAMENTO_RELATORIO_PDF;
+        return relatorio;
+
     }
 }
