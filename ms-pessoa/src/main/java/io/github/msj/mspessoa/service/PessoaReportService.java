@@ -1,21 +1,22 @@
 package io.github.msj.mspessoa.service;
 
 import io.github.msj.mspessoa.dto.request.PessoaReportRequestDTO;
-import io.github.msj.mspessoa.dto.response.CursoResponseDTO;
 import io.github.msj.mspessoa.dto.response.InscricaoResponseDTO;
 import io.github.msj.mspessoa.dto.response.PessoaInscritaReportResponseDTO;
 import io.github.msj.mspessoa.dto.response.PessoaResponseDTO;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class PessoaReportService {
@@ -24,17 +25,11 @@ public class PessoaReportService {
 
     private final String LOCAL_ARMAZENAMENTO_IMG_LOGO = "/home/dev/Dev/projects-Java/scpci-microsservice/ms-pessoa/src/main/java/io/github/msj/mspessoa/report/images/logo_scpci-web.png";
 
-    private final String LOCAL_ARMAZENAMENTO_RELATORIO_PDF = "/home/dev/Downloads/pessoas-inscritas.pdf";
-
-
     @Autowired
     PessoaService pessoaService;
 
     @Autowired
     InscricaoClientService inscricaoClientService;
-
-    @Autowired
-    CursoClientService cursoClientService;
 
     public byte[] relatorioPessoasInscritas(PessoaReportRequestDTO pessoaReportRequestDTO) throws JRException, FileNotFoundException {
         List<PessoaInscritaReportResponseDTO> pessoasInscritas = new ArrayList<>();
