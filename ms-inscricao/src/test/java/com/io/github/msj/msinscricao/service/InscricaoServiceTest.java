@@ -36,9 +36,6 @@ public class InscricaoServiceTest {
     InscricaoRepository inscricaoRepository;
 
     @Mock
-    CursoClientService cursoClientService;
-
-    @Mock
     PessoaClientService pessoaClientService;
 
     @Mock
@@ -53,13 +50,16 @@ public class InscricaoServiceTest {
         var inscricaoRequestDTO = InscricaoRequestDTO.builder().idCurso(1).cpf("11122233344").nota(new BigDecimal(10)).build();
         var inscricao = Inscricao.builder().idCurso(1).cpf("11122233344").nota(new BigDecimal(10)).build();
         var inscricaoSalva = Inscricao.builder().codigo(Long.valueOf(ID)).idCurso(1).cpf("11122233344").nota(new BigDecimal(10)).build();
+        var inscricaoEncontrada = Inscricao.builder().codigo(Long.valueOf(25L)).idCurso(1).cpf("00055566688").nota(new BigDecimal(10)).build();
 
-        when(inscricaoRepository.existsByCpf(inscricaoRequestDTO.getCpf())).thenReturn(false);
+        List<Inscricao> inscricaoList = Arrays.asList(inscricaoEncontrada);
+
+        when(inscricaoRepository.findByIdCurso(inscricaoRequestDTO.getIdCurso())).thenReturn(inscricaoList);
         when(modelMapper.map(any(), any())).thenReturn(inscricao);
         when(inscricaoRepository.save(inscricao)).thenReturn(inscricaoSalva);
         InscricaoMensagemResponseDTO retorno = inscricaoService.salvar(inscricaoRequestDTO);
 
-        verify(inscricaoRepository, times(1)).existsByCpf(eq(inscricaoRequestDTO.getCpf()));
+        verify(inscricaoRepository, times(1)).findByIdCurso(eq(inscricaoRequestDTO.getIdCurso()));
         verify(modelMapper, times(1)).map(any(), any());
         verify(inscricaoRepository, times(1)).save(eq(inscricao));
 
@@ -74,11 +74,15 @@ public class InscricaoServiceTest {
 
         var inscricaoRequestDTO = InscricaoRequestDTO.builder().idCurso(1).cpf("11122233344").nota(new BigDecimal(10)).build();
 
-        when(inscricaoRepository.existsByCpf(inscricaoRequestDTO.getCpf())).thenReturn(true);
+        var inscricaoEncontrada = Inscricao.builder().codigo(Long.valueOf(25L)).idCurso(1).cpf("11122233344").nota(new BigDecimal(10)).build();
+
+        List<Inscricao> inscricaoList = Arrays.asList(inscricaoEncontrada);
+
+        when(inscricaoRepository.findByIdCurso(inscricaoRequestDTO.getIdCurso())).thenReturn(inscricaoList);
 
         assertThrows(NegocioException.class, () -> inscricaoService.salvar(inscricaoRequestDTO), "O candidato já está inscrito no curso.");
 
-        verify(inscricaoRepository, times(1)).existsByCpf(eq(inscricaoRequestDTO.getCpf()));
+        verify(inscricaoRepository, times(1)).findByIdCurso(eq(inscricaoRequestDTO.getIdCurso()));
 
     }
 
@@ -122,9 +126,7 @@ public class InscricaoServiceTest {
         List<InscricaoFinalizadaResponseDTO> responseDTOS =Arrays.asList(retorno1, retorno3);
 
         when(inscricaoRepository.findByIdCurso(ID)).thenReturn(inscricoes);
-        //when(modelMapper.map(any(), any())).thenReturn(retorno1, retorno3);
         when(pessoaClientService.buscarPessoaPorCpf(inscricao.getCpf())).thenReturn(PessoaResponseDTO.builder().nome("Teste").sobrenome("Teste2").cpf("11122233344").build());
-
 
         List<InscricaoResponseDTO> retorno = inscricaoService.inscritosFinalizados(ID);
 
