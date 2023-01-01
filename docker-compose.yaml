@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  ic-eureka-server:
+    image: com.example/product-service:latest
+    container_name: ms-eureka-server
+    networks:
+      - scpci-network
+    build:
+      context: ./ic-eureka-server
+    expose:
+      - 8761
+    ports:
+      - 8761:8761
+
+  ms-pessoa:
+    image: com.example/product-service:latest
+    container_name: ms-pessoa-server
+    networks:
+      - scpci-network
+    build:
+      context: ./ms-pessoa
+
+  ms-curso:
+    image: com.example/product-service:latest
+    container_name: ms-curso-server
+    networks:
+      - scpci-network
+    build:
+      context: ./ms-curso
+
+  ms-inscricao:
+    image: com.example/product-service:latest
+    container_name: ms-inscricao-server
+    networks:
+      - scpci-network
+    build:
+      context: ./ms-inscricao
+
+  ms-cloud-gatewey:
+    image: com.example/product-service:latest
+    container_name: ms-cloud-gateway
+    networks:
+      - scpci-network
+    build:
+      context: ./ms-cloud-gatewey
+
+  mysqldb:
+    image: mysql:8
+    networks:
+      - scpci-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=db_curso
+      - MYSQL_USER=ms
+      - MYSQL_PASSWORD=password
