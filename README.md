@@ -14,6 +14,10 @@ O SCPCI-MICROSSERVICE [Sistema de Cadastro de Pessoas, Cursos e Inscrições] é
 - Eureka Server
 - Cloud Gateway
 
+# Padrão de Camadas
+
+
+![Padrao](https://github.com/Mateus-msj3/assets/raw/main/padrao-camadas.png)
 # Tecnologias utilizadas
 
 ## Backend
